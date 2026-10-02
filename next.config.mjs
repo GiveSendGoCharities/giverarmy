@@ -10,9 +10,10 @@ const nextConfig = {
   async rewrites() {
     return [
       // v7.3 story-led landing page (self-contained HTML in public/).
-      // Candidate to replace the homepage; promote by adding
-      // { source: "/", destination: "/join.html" } here.
-      { source: "/join", destination: "/join.html" },
+      // /join is taken by a platform-level redirect to the payment flow, so
+      // this lives at /enlist. Candidate to replace the homepage; promote by
+      // adding { source: "/", destination: "/enlist.html" } here.
+      { source: "/enlist", destination: "/enlist.html" },
     ];
   },
 };
