@@ -689,9 +689,10 @@ body{background:var(--white)}
   .story-hero[data-mode="video"] .wrap,.story-hero[data-mode="crowd"] .wrap{padding-top:112px;padding-bottom:48px}
   .story-hero[data-mode="scene"]{min-height:92svh}
 }
+.draftbar{display:none!important}
 </style>
 </head>
-<body class="has-draft">
+<body class="hide-tags">
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MQZH3KTZ"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -1261,7 +1262,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return `<article class="card${c.pending?' pending':''}">${media}<div class="body"><div class="meta"><span class="fund">${c.fund}</span>${helper}${c.place?`<span class="place">${c.place}</span>`:''}</div><h3>${c.title}</h3>${body}<p class="who">${c.who||c.name}${tag}</p></div></article>`;
   }
   function renderCards(){
-    const list=CARDS.filter(c=>theme==='all'||c.themes.includes(theme));
+    const list=CARDS.filter(c=>!c.pending).filter(c=>theme==='all'||c.themes.includes(theme));
     const shown=expanded?list:list.slice(0,PAGE);
     cardsEl.innerHTML=shown.map(cardHTML).join('');
     let more=$('moreRow'); if(!more){more=document.createElement('div');more.id='moreRow';more.className='more-row';cardsEl.after(more);}
@@ -1387,14 +1388,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if(n===2){const f=$('em'); f && f.focus({preventScroll:true});}
   }
   document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>goStep(+b.dataset.back)));
-  $('to2').addEventListener('click',()=>{ const a=amount(); if(a>=5&&a<=10000){goStep(2);return;} $('otherErr').classList.add('show'); otherAmt.focus(); });
+  $('to2').addEventListener('click',()=>{ const a=amount(); if(a>=5&&a<=10000){dl('begin_checkout',{currency:'USD',value:a,frequency:s.freq});goStep(2);return;} $('otherErr').classList.add('show'); otherAmt.focus(); });
   const check=(id,t)=>{const el=$(id),ok=t(el.value.trim());el.setAttribute('aria-invalid',String(!ok));$(id+'Err').classList.toggle('show',!ok);return ok;};
   $('to3').addEventListener('click',()=>{
     const ok=[check('em',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)),check('fn',v=>v.length>0),check('ln',v=>v.length>0)];
     if(ok.includes(false)){ $(['em','fn','ln'][ok.indexOf(false)]).focus(); return; }
+    dl('add_payment_info',{currency:'USD',value:amount()+tipValue(amount()),frequency:s.freq});
     goStep(3); preparePayment();
   });
   $('ln').addEventListener('keydown',e=>{if(e.key==='Enter')$('to3').click();});
+
+  /* ================= Analytics (GTM dataLayer) ================= */
+  const dl=(ev,data)=>{try{(window.dataLayer=window.dataLayer||[]).push(Object.assign({event:ev},data||{}));}catch(e){}};
 
   /* ================= Stripe (live payments) ================= */
   const SP={pk:null,stripe:null,elements:null,key:'',ready:false};
@@ -1446,6 +1451,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     busy=false; pb.textContent=label; pb.removeAttribute('aria-busy');
   }));
   function confirmGift(){
+    if(enlisted) return;
+    const ga=amount(), gt=tipValue(ga);
+    dl('purchase',{currency:'USD',value:Math.round((ga+gt)*100)/100,frequency:s.freq});
     enlisted=true; $('wFlow').hidden=true; const c=$('p4'); c.hidden=false;
     if(count!==null){ $('giftNo').textContent=fmtN(count+1); count=count+1; paint(true); } // your gift takes the next number
     const name=$('fn').value.trim(), m=s.freq==='monthly', em=$('em').value.trim();
