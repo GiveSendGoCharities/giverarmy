@@ -14,6 +14,9 @@ const nextConfig = {
       // this lives at /enlist. Candidate to replace the homepage; promote by
       // adding { source: "/", destination: "/enlist.html" } here.
       { source: "/enlist", destination: "/enlist.html" },
+      // A/B variant B: same page, pathname-detected — shows the GiverArmyFund
+      // campaign's hosted donate widget instead of the Stripe widget.
+      { source: "/join", destination: "/enlist.html" },
     ];
   },
 };

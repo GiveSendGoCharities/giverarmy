@@ -1404,6 +1404,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   /* ================= Analytics (GTM dataLayer) ================= */
   const dl=(ev,data)=>{try{(window.dataLayer=window.dataLayer||[]).push(Object.assign({event:ev},data||{}));}catch(e){}};
 
+  /* ================= A/B: join flow =================
+     A (default)        = this page's Stripe widget
+     B (/join or ?v=b)  = the GiverArmyFund campaign's hosted donate widget
+     ?v=a / ?v=b always force a variant (QA + ad links). */
+  const abForced=(new URLSearchParams(location.search).get('v')||'').toLowerCase();
+  const abVariant=(abForced==='a'||abForced==='b') ? abForced
+    : (location.pathname.replace(/\/+$/,'')==='/join' ? 'b' : 'a');
+  dl('ab_join_variant',{ab_variant:abVariant});
+  if(abVariant==='b'){
+    const flow=document.getElementById('wFlow');
+    if(flow){
+      flow.hidden=true;
+      const d=document.createElement('div');
+      d.id='gsgEmbed';
+      d.innerHTML='<div class="w-head" style="margin-bottom:14px"><div>'
+        +'<h2>Enlist in the Giver Army</h2>'
+        +'<p class="w-gift needs-count">You\u2019ll be gift #<span class="giftno" data-next></span></p>'
+        +'</div></div>'
+        +'<iframe src="https://www.givesendgo.com/GiverArmyFund/donate/widget?primary=%23b38e3d&frequency=monthly"'
+        +' width="100%" height="700" frameborder="0" style="border:0;border-radius:12px;display:block;width:100%"'
+        +' title="Donate via GiveSendGo" allow="payment *"></iframe>'
+        +'<p class="disclose" style="padding:12px 0 16px"><span>Gifts through this form are processed on the GiveSendGo platform campaign and are made to GiveSendGo Charities, Inc., a 501(c)(3) public charity (EIN 88-3776392).</span></p>';
+      flow.parentNode.insertBefore(d,flow);
+      dl('ab_join_iframe_shown',{ab_variant:'b'});
+    }
+  }
+
   /* ================= Stripe (live payments) ================= */
   const SP={pk:null,stripe:null,elements:null,key:'',ready:false};
   fetch('/api/stripe/config').then(r=>r.json()).then(c=>{ SP.pk=(c&&c.publishableKey)||null; handleReturn(); }).catch(()=>{});
