@@ -1409,9 +1409,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      B (/join or ?v=b)  = the GiverArmyFund campaign's hosted donate widget
      ?v=a / ?v=b always force a variant (QA + ad links). */
   const abForced=(new URLSearchParams(location.search).get('v')||'').toLowerCase();
-  // Live default is the campaign widget (B); the Stripe flow stays
-  // reachable at ?v=a for QA and future testing.
-  const abVariant=(abForced==='a'||abForced==='b') ? abForced : 'b';
+  const abVariant=(abForced==='a'||abForced==='b') ? abForced
+    : (location.pathname.replace(/\/+$/,'')==='/join' ? 'b' : 'a');
   dl('ab_join_variant',{ab_variant:abVariant});
   if(abVariant==='b'){
     const flow=document.getElementById('wFlow');
