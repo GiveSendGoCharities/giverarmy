@@ -1,3 +1,4 @@
+import { createClient } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { featuredStories, youTubeId, type Story } from "@/lib/stories";
 import { orgStoryUrl } from "@/lib/links";
@@ -16,7 +17,25 @@ import { orgStoryUrl } from "@/lib/links";
  *  - Curated stories that aren't in the table (e.g. champion videos) are
  *    appended after the live ones.
  *  - Any failure falls back to the curated list — never an empty carousel.
+ *
+ * ACCESS: impact_stories has NO anon grant or RLS policy (verified against
+ * role_table_grants / pg_policy — only service_role can read it, same as the
+ * .org). So this reads with SUPABASE_SERVICE_ROLE_KEY, SERVER-ONLY: this
+ * module must only ever be imported from server components / route handlers,
+ * and only published rows are selected. Do not grant anon access to the
+ * shared table just for this.
  */
+
+function storiesClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (url && serviceKey) {
+    return createClient(url, serviceKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+  }
+  return supabase; // anon client — works if a read policy is ever added
+}
 
 type ImpactStoryRow = {
   slug: string | null;
@@ -72,9 +91,10 @@ function rowToStory(row: ImpactStoryRow): Story {
 }
 
 export async function getStoryLineup(): Promise<Story[]> {
-  if (!supabase) return featuredStories;
+  const client = storiesClient();
+  if (!client) return featuredStories;
   try {
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from("impact_stories")
       .select(
         "slug, title, subtitle, recipient_name, location, fund, video_url, poster_url, pull_quote, body, is_featured, featured_at, published_at",
