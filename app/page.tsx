@@ -83,7 +83,7 @@ export default async function HomePage() {
           ) : null}
           {rest.length > 0 ? (
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {rest.slice(0, 3).map((story) => (
+              {rest.slice(0, 6).map((story) => (
                 <StoryCard key={story.slug} story={story} />
               ))}
             </div>
