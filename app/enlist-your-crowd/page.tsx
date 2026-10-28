@@ -68,7 +68,7 @@ export default function EnlistYourCrowdPage() {
           </div>
 
           <div className="mx-auto mt-12 flex max-w-3xl flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <CTA href={links.join} external variant="gold">
+            <CTA href={links.join} variant="gold">
               Join the Army — {PRICE_LABEL}
             </CTA>
             <CTA href={links.contact} external variant="ghost">

@@ -154,7 +154,7 @@ export default function MovementPage() {
               </p>
             </div>
             <div className="flex flex-col gap-3">
-              <CTA href={links.join} external variant="gold">
+              <CTA href={links.join} variant="gold">
                 Join the Army — from $5/mo
               </CTA>
               <CTA href={links.charity} external variant="ghost-dark">

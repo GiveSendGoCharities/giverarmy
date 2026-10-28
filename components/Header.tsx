@@ -50,8 +50,6 @@ export function Header() {
         <div className="flex items-center gap-3">
           <a
             href={links.join}
-            target="_blank"
-            rel="noopener noreferrer"
             className="btn-gold hidden px-5 py-2.5 text-sm sm:inline-flex"
           >
             Join — {PRICE_LABEL}
@@ -100,8 +98,6 @@ export function Header() {
             })}
             <a
               href={links.join}
-              target="_blank"
-              rel="noopener noreferrer"
               className="btn-gold mt-2 w-full"
             >
               Join the Army — {PRICE_LABEL}

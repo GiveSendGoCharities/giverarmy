@@ -93,7 +93,6 @@ export default function MultiplyPage() {
             </div>
             <CTA
               href={links.join}
-              external
               variant="ghost"
               className="!border-slate-ink/30 !bg-slate-ink !text-white hover:!border-slate-ink hover:!text-gold-bright"
             >

@@ -5,6 +5,7 @@ import { site } from "@/lib/site";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { GtmNoScript, GtmScript } from "@/components/GoogleTagManager";
+import { JoinWidget } from "@/components/JoinWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,6 +64,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <JoinWidget />
       </body>
     </html>
   );

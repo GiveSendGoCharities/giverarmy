@@ -41,7 +41,7 @@ export function Hero() {
           </p>
 
           <div className="mt-9 flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
-            <CTA href={links.join} external variant="gold">
+            <CTA href={links.join} variant="gold">
               Join the Army — {PRICE_LABEL}
             </CTA>
             <CTA href={links.give} external variant="ghost-dark">

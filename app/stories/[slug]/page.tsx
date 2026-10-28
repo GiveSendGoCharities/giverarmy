@@ -142,7 +142,7 @@ export default function StoryPage({ params }: Params) {
               moment with no one behind them.
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <CTA href={links.join} external variant="gold">
+              <CTA href={links.join} variant="gold">
                 Join the Army — {PRICE_LABEL}
               </CTA>
               <CTA href={links.give} external variant="ghost-dark">

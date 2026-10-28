@@ -201,7 +201,7 @@ export default async function HomePage() {
             generosity into changed lives.
           </p>
           <div className="mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
-            <CTA href={links.join} external variant="gold">
+            <CTA href={links.join} variant="gold">
               Join the Army — from $5/mo
             </CTA>
             <CTA href={links.give} external variant="ghost-dark">

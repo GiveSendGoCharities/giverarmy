@@ -12,11 +12,13 @@
  * Swap these placeholder hrefs for production URLs in one place.
  */
 export const links = {
-  // Donor / checkout actions → the GiveSendGo Charities giving widget.
+  // Donor / checkout actions. All "Join" CTAs must route here (never to
+  // /multiply). With JavaScript, <JoinWidget> intercepts clicks on this href
+  // and pops up the GiverArmyFund donate widget in a modal; without it the
+  // link falls through to /join, which serves the same widget full-page.
   // Widget presets are $25 / $50 / $125 plus a custom field with a $5.00
-  // minimum — $5/mo is the floor, not a preset or default. All "Join" CTAs
-  // must route here (never to /multiply).
-  join: "https://www.givesendgo.org/join", // giving widget (placeholder URL)
+  // minimum — $5/mo is the floor, not a preset or default.
+  join: "/join",
   give: "https://www.givesendgo.org/give", // one-time gift (placeholder URL)
 
   // The charity / donor site
