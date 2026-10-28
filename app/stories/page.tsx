@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 import { Container } from "@/components/ui";
 import { StoriesBrowser } from "@/components/StoriesBrowser";
-import { featuredStories } from "@/lib/stories";
+import { getStoryLineup } from "@/lib/liveStories";
 
 export const metadata: Metadata = {
   title: "Stories",
@@ -10,7 +10,10 @@ export const metadata: Metadata = {
     "Real receipts. Real lives. Real hope. Video testimonies of the crowdless finding a crowd, filterable by cause.",
 };
 
-export default function StoriesPage() {
+export const revalidate = 1800; // ISR — pick up newly published stories
+
+export default async function StoriesPage() {
+  const stories = await getStoryLineup();
   return (
     <>
       <PageHero
@@ -20,7 +23,7 @@ export default function StoriesPage() {
       />
       <section className="bg-cream-warm py-16 sm:py-20">
         <Container>
-          <StoriesBrowser stories={featuredStories} />
+          <StoriesBrowser stories={stories} />
         </Container>
       </section>
     </>

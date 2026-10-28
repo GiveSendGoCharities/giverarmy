@@ -14,15 +14,16 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 import { CandidBadge } from "@/components/CandidBadge";
 import { GiftInMotion } from "@/components/GiftInMotion";
 import { getMovementStats } from "@/lib/stats";
-import { anchorStory, secondaryStories } from "@/lib/stories";
+import { getStoryLineup } from "@/lib/liveStories";
 import { links } from "@/lib/links";
 
 export const revalidate = 1800; // ISR — refresh live stats every 30 min
 
 export default async function HomePage() {
   const movementStats = await getMovementStats();
-  const anchor = anchorStory;
-  const rest = secondaryStories;
+  const stories = await getStoryLineup();
+  const anchor = stories[0];
+  const rest = stories.slice(1);
   return (
     <>
       {/* 1 — Hero */}
