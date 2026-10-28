@@ -49,7 +49,7 @@ export const footerNav = {
   ],
   give: [
     // Routes to the giving widget — never to /multiply.
-    { label: "Join the Army", href: links.join, external: true },
+    { label: "Join the Army", href: links.join },
     { label: "Give once", href: links.give, external: true },
     { label: "The 12 Causes", href: "/impact#causes" },
     { label: "Where your gift goes", href: "/impact#transparency" },
